@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
@@ -30,7 +31,7 @@ public class MyLocationReceiver extends BroadcastReceiver {
 
         if(intent.hasExtra(locationKey)){
             Location loc = (Location)intent.getExtras().get(locationKey);
-            //Toast.makeText(context, "Location changed : Lat:" + loc.getLatitude() + "Lng:" + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Location changed : Lat:" + loc.getLatitude() +"  "+ "Lng:" + loc.getLongitude(), Toast.LENGTH_LONG).show();
 
             //Parse保存部分
             ParseObject geoObject = new ParseObject("GeoData");
@@ -50,6 +51,6 @@ public class MyLocationReceiver extends BroadcastReceiver {
             Log.d("GeoData", String.valueOf(loc.getLatitude()) + " : " + String.valueOf(loc.getLongitude()) + " : " + timeStamp);
         }
 
-
     }
+
 }

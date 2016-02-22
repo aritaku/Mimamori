@@ -2,12 +2,9 @@ package medinnovation.mimamori;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.nfc.Tag;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-import java.security.Provider;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,16 +48,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         longitudeTextView = (TextView)findViewById(R.id.longitudeTextView);
         statusTextView = (TextView)findViewById(R.id.statusTextView);
 
-//        // 精度を設定
-//        Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        
         longitude = 0.0;
         latitude = 0.0;
 
         //---use the LocationManager class to obtain locations data---
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-        //locationManager.addGpsStatusListener(this);
 
         latitudeTextView.setText("経度");
         longitudeTextView.setText("緯度");
@@ -108,11 +99,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Toast.makeText(this, "GPS機能をONにしてください", Toast.LENGTH_LONG).show();
         }
 
-        //singleGPS();
+        singleGPS();
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                6000,
+                600000,
                 10,
                 pendingIntent
         );
@@ -131,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         locationManager.removeUpdates(this);
         //stopService(i);
+
+        Intent intent1 = new Intent(this, MyLocationReceiver.class);
+        locationManager.removeUpdates(pendingIntent);
     }
 
 
@@ -157,11 +151,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(Location location) {
 
-//        //更新時間600秒、更新距離10m
+        //更新時間600秒、更新距離10m
 //        locationManager.requestLocationUpdates(
 //                LocationManager.GPS_PROVIDER,
-//                600000, // 通知のための最小時間間隔（ミリ秒）
-//                10, // 通知のための最小距離間隔（メートル）
+//                6000, // 通知のための最小時間間隔（ミリ秒）
+//                1, // 通知のための最小距離間隔（メートル）
 //                this
 //        );
 
