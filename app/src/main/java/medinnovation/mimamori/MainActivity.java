@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     Date timeStamp;
     private LocationManager locationManager;
-    private GpsStatus.Listener mGpsStatusListener;
+    PendingIntent pendingIntent;
+    //private GpsStatus.Listener mGpsStatusListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //        // 精度を設定
 //        Criteria criteria = new Criteria();
 //        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-
-
+        
         longitude = 0.0;
         latitude = 0.0;
 
+        //---use the LocationManager class to obtain locations data---
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
         //locationManager.addGpsStatusListener(this);
 
@@ -79,8 +79,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void start(View view){
 
-        Intent i = new Intent(this, BackgroundGPSService.class);
-        startService(i);
+        //Intent i = new Intent(this, BackgroundGPSService.class);
+        Intent intent1 = new Intent(this, MyLocationReceiver.class);
+
+        pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent1,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+        //startService(i);
 
         //現在有効な位置プロバイダ名を得る
         String providers = Settings.Secure.getString(
@@ -100,13 +108,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Toast.makeText(this, "GPS機能をONにしてください", Toast.LENGTH_LONG).show();
         }
 
-        singleGPS();
+        //singleGPS();
 
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                60000,
+                6000,
                 10,
-                this
+                pendingIntent
         );
 
         latitudeTextView.setText(String.valueOf(latitude));
@@ -119,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         statusTextView.setText("現在は計測していません");
         longitudeTextView.setText("経度");
         latitudeTextView.setText("緯度");
-        Intent i = new Intent(this, BackgroundGPSService.class);
+        //Intent i = new Intent(this, BackgroundGPSService.class);
 
         locationManager.removeUpdates(this);
-        stopService(i);
+        //stopService(i);
     }
 
 
@@ -130,16 +138,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

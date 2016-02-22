@@ -29,7 +29,10 @@
             android:name="com.parse.CLIENT_KEY"
             android:value="UXjvGbfRIXgPcMlCsL0IgOAge7ygb2HitbSmIgtF" />
         <!-- サービスの登録 -->
+        <!--
         <service android:name=".BackgroundGPSService" />
+        -->
+        <receiver android:name=".MyLocationReceiver" />
     </application>
 
 </manifest>
