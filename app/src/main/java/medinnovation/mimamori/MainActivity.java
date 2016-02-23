@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         Intent intent1 = new Intent(this, MyLocationReceiver.class);
         locationManager.removeUpdates(pendingIntent);
+        Toast.makeText(this, "GPS情報の取得を停止しました", Toast.LENGTH_LONG).show();
     }
 
 
@@ -174,14 +175,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Long longTimeStamp = System.currentTimeMillis()/1000;
         String timestamp = longTimeStamp.toString();
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd h:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String timeStamp = sdf.format(c.getTime());
         geoObject.put("timeStamp", timeStamp);
         geoObject.put("OS", "Android");
         geoObject.saveInBackground();
 
         Log.d("GeoData", String.valueOf(latitude) + " : " + String.valueOf(longitude) + " : " + timeStamp);
-        Toast.makeText(this, "GPS情報を拾い始めました", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "GPS情報の取得を開始しました", Toast.LENGTH_SHORT).show();
 
     }
 
